@@ -1,0 +1,6 @@
+{
+    "extends": "@akrc/tsconfig/react.json",
+    "compilerOptions": {
+        "moduleResolution": "Bundler"
+    }
+}

@@ -1,19 +1,25 @@
 {
     "name": "@akrc/flowkit",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "description": "A flow chart library",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsup"
     },
     "type": "module",
-    "keywords": [],
-    "author": "",
+    "keywords": ["xyflow", "flow-chart"],
+    "author": "AkaraCHen",
     "license": "ISC",
     "devDependencies": {
+        "@xyflow/system": "^0.0.37",
         "tslib": "^2.6.3",
         "tsup": "^8.2.4",
         "typescript": "^5.5.4"
+    },
+    "module": "./dist/index.js",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
     }
 }

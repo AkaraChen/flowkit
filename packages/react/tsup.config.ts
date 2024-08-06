@@ -4,5 +4,5 @@ export default defineConfig({
     entryPoints: ['./src/index.ts'],
     format: ['esm'],
     dts: true,
-    external: [/^react/, /^xyflow/],
+    external: [/^react/, /^@xyflow/],
 });
