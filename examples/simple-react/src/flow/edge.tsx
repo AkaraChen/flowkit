@@ -1,6 +1,6 @@
-import { BezierEdge, defineKitEdge } from "@akrc/flowkit-react";
+import { BezierEdge, defineKitEdge } from '@akrc/flowkit-react';
 
-const bazier = defineKitEdge<{}>({
+const bazier = defineKitEdge({
     defaultData() {
         return {};
     },

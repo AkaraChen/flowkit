@@ -1,0 +1,10 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [".syncpackrc"],
+            "schema": {
+                "$ref": "https://unpkg.com/syncpack@11.2.1/dist/schema.json"
+            }
+        }
+    ]
+}

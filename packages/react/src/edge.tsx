@@ -5,8 +5,18 @@ import {
     getSimpleBezierPath,
     getSmoothStepPath,
 } from '@xyflow/react';
+import type { FC } from 'react';
+import type { KitDataType } from './data-type';
 
-export { StraightEdge } from '@xyflow/react';
+export interface KitCustomEdge<Data extends Record<string, unknown>> {
+    fc: FC<EdgeProps>;
+    defaultData: () => Data;
+}
+
+export interface KitHandle {
+    originalId: string;
+    type: KitDataType;
+}
 
 export function BezierEdge({
     id,
@@ -54,4 +64,10 @@ export function SimpleBezierEdge({
         targetY,
     });
     return <BaseEdge id={id} path={edgePath} />;
+}
+
+export function defineKitEdge<Data extends Record<string, unknown>>(
+    edge: KitCustomEdge<Data>,
+) {
+    return edge;
 }

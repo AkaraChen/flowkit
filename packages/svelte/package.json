@@ -1,10 +1,9 @@
 {
     "name": "@akrc/flowkit-svelte",
-    "version": "1.0.0",
     "description": "",
-    "main": "index.js",
-    "scripts": {},
-    "keywords": [],
+    "version": "1.0.0",
     "author": "",
-    "license": "ISC"
+    "keywords": [],
+    "license": "ISC",
+    "main": "index.js"
 }

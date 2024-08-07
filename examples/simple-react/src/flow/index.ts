@@ -1,6 +1,6 @@
-import { type FlowKitProps, createKit } from "@akrc/flowkit-react";
-import { edgeTypes } from "./edge";
-import { nodeTypes } from "./node";
+import { type FlowKitProps, createKit } from '@akrc/flowkit-react';
+import { edgeTypes } from './edge';
+import { nodeTypes } from './node';
 
 const kit = createKit({
     nodeTypes,
@@ -9,7 +9,7 @@ const kit = createKit({
 });
 
 const node1 = kit.defineNode(
-    "math-min",
+    'math-min',
     {
         left: 1,
         right: 1,
@@ -17,25 +17,29 @@ const node1 = kit.defineNode(
     {
         x: 200,
         y: 200,
-    }
+    },
 );
 
 const node2 = kit.defineNode(
-    "text-join",
+    'text-join',
     {
-        left: "Hello",
-        right: "World",
+        left: 'Hello',
+        right: 'World',
     },
     {
         x: 200,
         y: 400,
-    }
+    },
 );
 
-const edge = kit.defineEdge("bazier", {
-    source: node1.id,
-    target: node2.id,
-});
+const edge = kit.defineEdge(
+    'bazier',
+    {},
+    {
+        source: node1.id,
+        target: node2.id,
+    },
+);
 
 export default {
     nodes: [node1, node2],
