@@ -5,16 +5,21 @@ import type {
     Edge as XYFlowEdge,
 } from "@xyflow/react";
 import type { NodeBase, NodeProps, XYPosition } from "@xyflow/system";
-import type { ComponentProps, FC } from "react";
+import type { FC } from "react";
 
 export interface KitCustomNode<Data extends Record<string, unknown>> {
     fc: FC<NodeProps<NodeBase<Data>>>;
     defaultData: () => Data;
 }
 
+export interface KitCustomEdge<Data extends Record<string, unknown>> {
+    fc: FC<EdgeProps>;
+    defaultData: () => Data;
+}
+
 export interface CreateFlowKitReturn<
     NodeTypes extends Record<string, KitCustomNode<any>>,
-    EdgeTypes extends Record<string, FC<EdgeProps>>
+    EdgeTypes extends Record<string, KitCustomEdge<any>>
 > {
     nodeTypes: NodeTypes;
     edgeTypes: EdgeTypes;

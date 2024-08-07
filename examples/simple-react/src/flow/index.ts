@@ -1,5 +1,5 @@
 import { type FlowKitProps, createKit } from "@akrc/flowkit-react";
-import { EdgeLabel, edgeTypes } from "./edge";
+import { edgeTypes } from "./edge";
 import { nodeTypes } from "./node";
 
 const kit = createKit({
@@ -32,7 +32,7 @@ const node2 = kit.defineNode(
     }
 );
 
-const edge = kit.defineEdge(EdgeLabel.Bazier, {
+const edge = kit.defineEdge("bazier", {
     source: node1.id,
     target: node2.id,
 });

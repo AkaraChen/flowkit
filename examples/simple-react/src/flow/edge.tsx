@@ -1,11 +1,12 @@
-import { BezierEdge, defineKitEdge } from '@akrc/flowkit-react';
+import { BezierEdge, defineKitEdge } from "@akrc/flowkit-react";
 
-export enum EdgeLabel {
-    Bazier = 'bazier',
-}
-
-const bazier = defineKitEdge(BezierEdge);
+const bazier = defineKitEdge<{}>({
+    defaultData() {
+        return {};
+    },
+    fc: BezierEdge,
+});
 
 export const edgeTypes = {
-    [EdgeLabel.Bazier]: bazier,
+    bazier: bazier,
 };

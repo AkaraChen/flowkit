@@ -5,10 +5,10 @@ import type {
     XYPosition,
 } from "@xyflow/react";
 import { nanoid } from "nanoid";
-import type { FC } from "react";
 import type {
     CreateFlowKitOptions,
     CreateFlowKitReturn,
+    KitCustomEdge,
     KitCustomNode,
 } from "./types";
 
@@ -18,13 +18,15 @@ export function defineKitNode<Data extends Record<string, unknown>>(
     return node;
 }
 
-export function defineKitEdge(edge: FC<EdgeProps>) {
+export function defineKitEdge<Data extends Record<string, unknown>>(
+    edge: KitCustomEdge<Data>
+) {
     return edge;
 }
 
 export const createKit = <
     NodeTypes extends Record<string, KitCustomNode<any>>,
-    EdgeTypes extends Record<string, FC<EdgeProps>>
+    EdgeTypes extends Record<string, KitCustomEdge<any>>
 >({
     nodeTypes,
     edgeTypes,
@@ -69,6 +71,7 @@ export type {
     KitCustomNode,
     CreateFlowKitOptions,
     CreateFlowKitReturn,
+    KitCustomEdge,
 } from "./types";
 export {
     BezierEdge,
