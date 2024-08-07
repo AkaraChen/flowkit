@@ -1,24 +1,26 @@
-import { defineKitNode } from '@akrc/flowkit-react';
+import { defineKitNode } from "@akrc/flowkit-react";
+import { Handle, Position } from "@xyflow/react";
+import { NodeLayout } from "./layout";
 
 const mathMinNode = defineKitNode<{
     left: number;
     right: number;
 }>({
-    label: 'math-min',
     defaultData() {
         return {
             left: 0,
-            right: 0,
+            right: 1,
         };
     },
     fc({ data }) {
         return (
-            <div>
+            <NodeLayout>
                 <div>Math min</div>
                 <div>
                     {data.left} &lt; {data.right}
                 </div>
-            </div>
+                <Handle type="source" position={Position.Bottom} />
+            </NodeLayout>
         );
     },
 });
@@ -27,23 +29,26 @@ const textJoin = defineKitNode<{
     left: string;
     right: string;
 }>({
-    label: 'text-join',
     defaultData() {
         return {
-            left: '',
-            right: '',
+            left: "Hello",
+            right: "World",
         };
     },
     fc({ data }) {
         return (
-            <div>
+            <NodeLayout>
                 <div>Text join</div>
                 <div>
-                    {data.left} &lt; {data.right}
+                    {data.left}, {data.right}
                 </div>
-            </div>
+                <Handle type="target" position={Position.Top} />
+            </NodeLayout>
         );
     },
 });
 
-export const nodeTypes = [mathMinNode, textJoin] as const;
+export const nodeTypes = {
+    "math-min": mathMinNode,
+    "text-join": textJoin,
+};

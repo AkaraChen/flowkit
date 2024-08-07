@@ -1,26 +1,33 @@
-import type { DataType } from '@akrc/flowkit';
-import type { Node as XYFlowNode } from '@xyflow/react';
-import type { NodeBase, NodeProps, XYPosition } from '@xyflow/system';
-import type { ComponentProps, FC } from 'react';
+import type { DataType } from "@akrc/flowkit";
+import type {
+    EdgeProps,
+    Node as XYFlowNode,
+    Edge as XYFlowEdge,
+} from "@xyflow/react";
+import type { NodeBase, NodeProps, XYPosition } from "@xyflow/system";
+import type { ComponentProps, FC } from "react";
 
 export interface KitCustomNode<Data extends Record<string, unknown>> {
     fc: FC<NodeProps<NodeBase<Data>>>;
     defaultData: () => Data;
-    label: string;
 }
 
 export interface CreateFlowKitReturn<
-    NodeTypes extends KitCustomNode<any>[],
-    EdgeTypes extends any[],
+    NodeTypes extends Record<string, KitCustomNode<any>>,
+    EdgeTypes extends Record<string, FC<EdgeProps>>
 > {
     nodeTypes: NodeTypes;
     edgeTypes: EdgeTypes;
     dataTypes: DataType[];
-    defineNode: (
-        label: NodeTypes[number]['label'],
-        data: ComponentProps<NodeTypes[number]['fc']>['data'],
-        position: XYPosition,
-    ) => XYFlowNode;
+    defineNode<K extends keyof NodeTypes>(
+        label: K,
+        data: ReturnType<NodeTypes[K]["defaultData"]>,
+        position: XYPosition
+    ): XYFlowNode;
+    defineEdge: (
+        label: keyof EdgeTypes,
+        options: Pick<EdgeProps, "source" | "target">
+    ) => XYFlowEdge;
 }
 
 export type CreateFlowKitOptions<NodeTypes, EdgeTypes> = {
