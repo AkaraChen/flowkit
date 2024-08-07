@@ -1,11 +1,11 @@
-import { type FlowKitProps, createKit } from '@akrc/flowkit-react';
+import { type FlowKitProps, Kit } from '@akrc/flowkit-react';
 import { edgeTypes } from './edge';
 import { nodeTypes } from './node';
 
-const kit = createKit({
+export const kit = new Kit({
     nodeTypes,
     edgeTypes,
-    dataTypes: [],
+    name: 'simple-react-flowkit',
 });
 
 const node1 = kit.defineNode(

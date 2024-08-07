@@ -6,7 +6,6 @@ import {
     getSimpleBezierPath,
     getSmoothStepPath,
 } from '@xyflow/react';
-import type { Handle } from '@xyflow/system';
 import type { FC } from 'react';
 
 export interface KitCustomEdge<Data extends Record<string, unknown>> {

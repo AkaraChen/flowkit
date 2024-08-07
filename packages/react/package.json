@@ -29,5 +29,9 @@
         "dev": "tsup --watch"
     },
     "type": "module",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/index.d.ts",
+    "peerDependencies": {
+        "react": "*",
+        "react-dom": "*"
+    }
 }
