@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "A flow chart library",
     "scripts": {
+        "dev": "tsup --watch",
         "build": "tsup"
     },
     "type": "module",
