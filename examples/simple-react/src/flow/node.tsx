@@ -2,7 +2,7 @@ import { defineKitNode } from '@akrc/flowkit-react';
 import { Handle, Position } from '@xyflow/react';
 import { NodeLayout } from './layout';
 
-const mathMinNode = defineKitNode<{
+const mathMin = defineKitNode<{
     left: number;
     right: number;
 }>({
@@ -49,6 +49,6 @@ const textJoin = defineKitNode<{
 });
 
 export const nodeTypes = {
-    'math-min': mathMinNode,
+    'math-min': mathMin,
     'text-join': textJoin,
 };

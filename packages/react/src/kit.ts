@@ -1,4 +1,3 @@
-import type { DataType } from '@akrc/flowkit';
 import type {
     EdgeProps,
     Edge as XYFlowEdge,
@@ -15,7 +14,6 @@ export interface CreateFlowKitReturn<
 > {
     nodeTypes: NodeTypes;
     edgeTypes: EdgeTypes;
-    dataTypes: DataType[];
     defineNode<K extends keyof NodeTypes>(
         label: K,
         data: ReturnType<NodeTypes[K]['defaultData']>,
@@ -31,7 +29,6 @@ export interface CreateFlowKitReturn<
 export type CreateFlowKitOptions<NodeTypes, EdgeTypes> = {
     nodeTypes: Readonly<NodeTypes>;
     edgeTypes: EdgeTypes;
-    dataTypes: DataType[];
 };
 
 export const createKit = <
@@ -40,7 +37,6 @@ export const createKit = <
 >({
     nodeTypes,
     edgeTypes,
-    dataTypes,
 }: CreateFlowKitOptions<NodeTypes, EdgeTypes>): CreateFlowKitReturn<
     NodeTypes,
     EdgeTypes
@@ -73,7 +69,6 @@ export const createKit = <
     return {
         nodeTypes,
         edgeTypes,
-        dataTypes,
         defineNode,
         defineEdge,
     };

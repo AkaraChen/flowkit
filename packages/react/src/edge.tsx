@@ -1,3 +1,4 @@
+import type { KitDataType } from '@akrc/flowkit';
 import {
     BaseEdge,
     type EdgeProps,
@@ -5,17 +6,17 @@ import {
     getSimpleBezierPath,
     getSmoothStepPath,
 } from '@xyflow/react';
+import type { Handle } from '@xyflow/system';
 import type { FC } from 'react';
-import type { KitDataType } from './data-type';
 
 export interface KitCustomEdge<Data extends Record<string, unknown>> {
     fc: FC<EdgeProps>;
     defaultData: () => Data;
 }
 
-export interface KitHandle {
+export interface KitHandle<TypeData extends Record<string, unknown>> {
     originalId: string;
-    type: KitDataType;
+    type: KitDataType<TypeData>;
 }
 
 export function BezierEdge({
