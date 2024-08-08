@@ -1,31 +1,43 @@
-import type { NodeBase, NodeProps } from '@xyflow/system';
+import type { KitDataType } from '@akrc/flowkit';
+import type { HandleType, NodeBase, NodeProps } from '@xyflow/system';
 import type { FC } from 'react';
-import type { CommonHandleProps } from './field';
 import { NodeContextProvider } from './node-context';
 
-export type KitInternalNodeData = {
-    handles: CommonHandleProps<any>[];
-};
-
-export type KitNodeDataInternal = {
-    kit: KitInternalNodeData;
-};
-
-export interface KitCustomNode<Data extends Record<string, unknown>> {
-    fc: FC<NodeProps<NodeBase<KitNodeDataInternal & Data>>>;
-    defaultData: () => Data;
+export interface BaseHandleMeta {
+    type: HandleType;
+    dataType: KitDataType<any>;
+    name: string;
 }
 
-export function defineKitNode<Data extends Record<string, unknown>>(
-    node: KitCustomNode<Data>,
-) {
-    const defaultData = (): Data & KitNodeDataInternal => {
+export type KitNodeInternal<T extends Record<string, BaseHandleMeta>> = {
+    handles: T;
+};
+
+export type KitNodeDataWithInternal<T extends Record<string, BaseHandleMeta>> =
+    {
+        kit: KitNodeInternal<T>;
+    };
+
+export interface KitCustomNode<
+    Data extends Record<string, unknown>,
+    Handles extends Record<string, BaseHandleMeta>,
+> {
+    fc: FC<NodeProps<NodeBase<Data & KitNodeDataWithInternal<Handles>>>>;
+    defaultData: () => Data;
+    handles?: Handles;
+}
+
+export function defineKitNode<
+    Data extends Record<string, unknown>,
+    Handles extends Record<string, BaseHandleMeta>,
+>(node: KitCustomNode<Data, Handles>) {
+    const defaultData = (): Data & KitNodeDataWithInternal<Handles> => {
         const data = node.defaultData();
         return {
             ...data,
             kit: {
-                handles: [],
-            } as KitInternalNodeData,
+                handles: node.handles!,
+            },
         };
     };
     const fc: typeof node.fc = (props) => {
@@ -36,7 +48,16 @@ export function defineKitNode<Data extends Record<string, unknown>>(
                     id: props.id,
                 }}
             >
-                <FC {...props} />
+                <FC
+                    {...props}
+                    data={{
+                        ...props.data,
+                        kit: {
+                            ...props.data.kit,
+                            handles: props.data.kit?.handles ?? [], // Ensure handles is always defined
+                        },
+                    }}
+                />
             </NodeContextProvider>
         );
     };
