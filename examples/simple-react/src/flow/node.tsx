@@ -1,5 +1,4 @@
 import { CommonHandle, defineKitNode } from '@akrc/flowkit-react';
-import { nanoid } from 'nanoid';
 import { dataTypes } from './data-types';
 import { NodeLayout } from './layout';
 
@@ -9,6 +8,18 @@ const mathMin = defineKitNode({
             left: 0,
             right: 1,
         };
+    },
+    handles: {
+        left: {
+            name: 'left',
+            type: 'source',
+            dataType: dataTypes.number,
+        },
+        right: {
+            name: 'right',
+            type: 'source',
+            dataType: dataTypes.number,
+        },
     },
     fc({ data }) {
         const handles = data.kit.handles;
@@ -22,18 +33,6 @@ const mathMin = defineKitNode({
             </NodeLayout>
         );
     },
-    handles: {
-        left: {
-            name: 'left',
-            type: 'source',
-            dataType: dataTypes.number,
-        },
-        right: {
-            name: 'right',
-            type: 'source',
-            dataType: dataTypes.number,
-        },
-    },
 });
 
 const textJoin = defineKitNode({
@@ -42,6 +41,18 @@ const textJoin = defineKitNode({
             left: 'Hello',
             right: 'World',
         };
+    },
+    handles: {
+        left: {
+            name: 'left',
+            type: 'target',
+            dataType: dataTypes.string,
+        },
+        right: {
+            name: 'right',
+            type: 'target',
+            dataType: dataTypes.string,
+        },
     },
     fc({ data }) {
         return (
@@ -53,18 +64,6 @@ const textJoin = defineKitNode({
                 <CommonHandle {...data.kit.handles.left} className='size-4' />
             </NodeLayout>
         );
-    },
-    handles: {
-        left: {
-            name: 'left',
-            type: 'target',
-            dataType: dataTypes.string,
-        },
-        right: {
-            name: 'right',
-            type: 'target',
-            dataType: dataTypes.string,
-        },
     },
 });
 
