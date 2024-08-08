@@ -1,5 +1,4 @@
 import { CommonHandle, defineKitNode } from '@akrc/flowkit-react';
-import { Position } from '@xyflow/react';
 import { dataTypes } from './data-types';
 import { NodeLayout } from './layout';
 
