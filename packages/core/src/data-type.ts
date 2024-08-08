@@ -1,10 +1,13 @@
-export interface KitDataType<Data extends Record<string, unknown>> {
-    name: string;
-    data: Data;
-}
+export class KitDataType<Data extends Record<string, unknown>> {
+    define(data: Data): {
+        type: string;
+        data: Data;
+    } {
+        return {
+            type: this.name,
+            data,
+        };
+    }
 
-export function defineKitDataType<Data extends Record<string, unknown>>(
-    dataType: KitDataType<Data>,
-) {
-    return dataType;
+    constructor(public name: string) {}
 }

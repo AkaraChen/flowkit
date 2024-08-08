@@ -1,1 +1,1 @@
-export { defineKitDataType, type KitDataType } from './data-type';
+export { KitDataType } from './data-type';

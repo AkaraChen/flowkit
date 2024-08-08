@@ -1,5 +1,6 @@
-import { defineKitNode } from '@akrc/flowkit-react';
-import { Handle, Position } from '@xyflow/react';
+import { CommonHandle, defineKitNode } from '@akrc/flowkit-react';
+import { Position } from '@xyflow/react';
+import { dataTypes } from './data-types';
 import { NodeLayout } from './layout';
 
 const mathMin = defineKitNode<{
@@ -19,7 +20,11 @@ const mathMin = defineKitNode<{
                 <div>
                     {data.left} &lt; {data.right}
                 </div>
-                <Handle type='source' position={Position.Bottom} />
+                <CommonHandle
+                    type='source'
+                    position={Position.Bottom}
+                    dataType={dataTypes.number}
+                />
             </NodeLayout>
         );
     },
@@ -42,7 +47,11 @@ const textJoin = defineKitNode<{
                 <div>
                     {data.left}, {data.right}
                 </div>
-                <Handle type='target' position={Position.Top} />
+                <CommonHandle
+                    type='target'
+                    position={Position.Top}
+                    dataType={dataTypes.string}
+                />
             </NodeLayout>
         );
     },
