@@ -24,6 +24,7 @@ const mathMin = defineKitNode<{
                     type='source'
                     position={Position.Bottom}
                     dataType={dataTypes.number}
+                    className='size-4'
                 />
             </NodeLayout>
         );
@@ -51,6 +52,7 @@ const textJoin = defineKitNode<{
                     type='target'
                     position={Position.Top}
                     dataType={dataTypes.string}
+                    className='size-4'
                 />
             </NodeLayout>
         );

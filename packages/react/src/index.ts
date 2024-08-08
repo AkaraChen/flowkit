@@ -8,4 +8,4 @@ export {
     defineKitEdge,
     type KitCustomEdge,
 } from './edge';
-export { CommonHandle } from './field';
+export { CommonHandle, type CommonHandleProps } from './field';

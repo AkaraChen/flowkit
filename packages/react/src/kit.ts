@@ -8,7 +8,7 @@ import type { XYPosition } from '@xyflow/system';
 import { nanoid } from 'nanoid';
 import type { DragEvent, DragEventHandler } from 'react';
 import type { KitCustomEdge } from './edge';
-import type { KitCustomNode } from './node';
+import type { KitCustomNode, KitInternalNodeData } from './node';
 
 export class Kit<
     NodeTypes extends Record<string, KitCustomNode<any>>,
@@ -31,13 +31,21 @@ export class Kit<
 
     defineNode<K extends keyof NodeTypes>(
         label: K,
-        data: ReturnType<NodeTypes[K]['defaultData']>,
+        data: Partial<Omit<ReturnType<NodeTypes[K]['defaultData']>, 'kit'>>,
         position: XYPosition,
     ): XYFlowNode {
+        const nodeType = this.nodeTypes[label];
+        const dataWithInternal = {
+            ...nodeType?.defaultData(),
+            ...data,
+            kit: {
+                handles: [],
+            } as KitInternalNodeData,
+        };
         return {
             id: nanoid(),
             position,
-            data: data,
+            data: dataWithInternal,
             type: label as string,
         };
     }
