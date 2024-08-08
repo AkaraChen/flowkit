@@ -1,3 +1,4 @@
+import type { KitDataType } from '@akrc/flowkit';
 import type {
     EdgeProps,
     ReactFlowInstance,
@@ -6,7 +7,7 @@ import type {
 } from '@xyflow/react';
 import type { XYPosition } from '@xyflow/system';
 import { nanoid } from 'nanoid';
-import type { DragEvent, DragEventHandler } from 'react';
+import { type DragEvent, type DragEventHandler, useId } from 'react';
 import type { KitCustomEdge } from './edge';
 import type { KitCustomNode, KitInternalNodeData } from './node';
 

@@ -22,7 +22,6 @@ const mathMin = defineKitNode<{
                 </div>
                 <CommonHandle
                     type='source'
-                    position={Position.Bottom}
                     dataType={dataTypes.number}
                     className='size-4'
                 />
@@ -50,7 +49,6 @@ const textJoin = defineKitNode<{
                 </div>
                 <CommonHandle
                     type='target'
-                    position={Position.Top}
                     dataType={dataTypes.string}
                     className='size-4'
                 />

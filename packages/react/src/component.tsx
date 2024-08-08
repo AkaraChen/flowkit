@@ -1,20 +1,23 @@
 import { ReactFlow, type ReactFlowProps } from '@xyflow/react';
-import type { FC, ReactNode } from 'react';
-import type { KitCustomEdge } from './edge';
-import type { KitCustomNode } from './node';
+import { type FC, type ReactNode, createContext, useContext } from 'react';
+import type { Kit } from './kit';
 
-export type FlowKitProps<
-    NodeType extends KitCustomNode<any> = KitCustomNode<any>,
-    EdgeType extends KitCustomEdge<any> = KitCustomEdge<any>,
-> = Omit<ReactFlowProps, 'nodeTypes' | 'edgeTypes'> & {
-    nodeTypes: Record<string, NodeType>;
-    edgeTypes: Record<string, EdgeType>;
+export type FlowKitProps = Omit<ReactFlowProps, 'nodeTypes' | 'edgeTypes'> & {
+    kit: InstanceType<typeof Kit>;
 };
 
-export function FlowKit<NodeType extends KitCustomNode<any>>(
-    props: FlowKitProps<NodeType>,
-): ReactNode {
-    const { children, nodeTypes, edgeTypes, ...rest } = props;
+const KitContext = createContext<InstanceType<typeof Kit>>(null as any);
+export const useKit = () => {
+    const context = useContext(KitContext);
+    if (!context) {
+        throw new Error('useKit must be used within a FlowKit component');
+    }
+    return context;
+};
+
+export function FlowKit(props: FlowKitProps): ReactNode {
+    const { children, kit, ...rest } = props;
+    const { nodeTypes, edgeTypes } = kit;
     return (
         <ReactFlow
             {...rest}
@@ -33,7 +36,7 @@ export function FlowKit<NodeType extends KitCustomNode<any>>(
                 {} as Record<string, FC<any>>,
             )}
         >
-            {children}
+            <KitContext.Provider value={kit}>{children}</KitContext.Provider>
         </ReactFlow>
     );
 }

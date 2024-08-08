@@ -56,8 +56,7 @@ function App() {
             </div>
             <div style={{ width: '75vw', height: '100vh' }}>
                 <FlowKit
-                    nodeTypes={kit.nodeTypes}
-                    edgeTypes={kit.edgeTypes}
+                    kit={kit}
                     nodes={nodes}
                     edges={edges}
                     onNodesChange={onNodesChange}

@@ -1,4 +1,5 @@
-export class KitDataType<Data extends Record<string, unknown>> {
+export class KitDataType<Data> {
+    // will be used in the future, for the computing flow feature
     define(data: Data): {
         type: string;
         data: Data;
