@@ -3,16 +3,16 @@ import type {
     ReactFlowInstance,
     Edge as XYFlowEdge,
     Node as XYFlowNode,
-} from "@xyflow/react";
-import type { XYPosition } from "@xyflow/system";
-import { nanoid } from "nanoid";
-import type { DragEvent, DragEventHandler } from "react";
-import type { KitCustomEdge } from "./edge";
-import type { KitCustomNode } from "./node";
+} from '@xyflow/react';
+import type { XYPosition } from '@xyflow/system';
+import { nanoid } from 'nanoid';
+import type { DragEvent, DragEventHandler } from 'react';
+import type { KitCustomEdge } from './edge';
+import type { KitCustomNode, KitInternalNodeData } from './node';
 
 export class Kit<
     NodeTypes extends Record<string, KitCustomNode<any>>,
-    EdgeTypes extends Record<string, KitCustomEdge<any>>
+    EdgeTypes extends Record<string, KitCustomEdge<any>>,
 > {
     readonly name: string;
     readonly nodeTypes: NodeTypes;
@@ -23,7 +23,7 @@ export class Kit<
         nodeTypes: NodeTypes;
         edgeTypes: EdgeTypes;
     }) {
-        const { name = "flowkit-app", nodeTypes, edgeTypes } = opts;
+        const { name = 'flowkit-app', nodeTypes, edgeTypes } = opts;
         this.name = name;
         this.nodeTypes = nodeTypes;
         this.edgeTypes = edgeTypes;
@@ -31,21 +31,29 @@ export class Kit<
 
     defineNode<K extends keyof NodeTypes>(
         label: K,
-        data: ReturnType<NodeTypes[K]["defaultData"]>,
-        position: XYPosition
+        data: Partial<Omit<ReturnType<NodeTypes[K]['defaultData']>, 'kit'>>,
+        position: XYPosition,
     ): XYFlowNode {
+        const nodeType = this.nodeTypes[label];
+        const dataWithInternal = {
+            ...nodeType?.defaultData(),
+            ...data,
+            kit: {
+                handles: [],
+            } as KitInternalNodeData,
+        };
         return {
             id: nanoid(),
             position,
-            data: data,
+            data: dataWithInternal,
             type: label as string,
         };
     }
 
     defineEdge<K extends keyof EdgeTypes>(
         label: K,
-        data: ReturnType<EdgeTypes[K]["defaultData"]>,
-        options: Pick<EdgeProps, "source" | "target">
+        data: ReturnType<EdgeTypes[K]['defaultData']>,
+        options: Pick<EdgeProps, 'source' | 'target'>,
     ): XYFlowEdge {
         return {
             id: nanoid(),
@@ -61,7 +69,7 @@ export class Kit<
         const format = `application/${this.name}`;
         const onDragOver: DragEventHandler = (event) => {
             event.preventDefault();
-            event.dataTransfer.dropEffect = "move";
+            event.dataTransfer.dropEffect = 'move';
         };
         const onDrop: DragEventHandler = (event) => {
             if (event.dataTransfer.types.includes(format)) {
@@ -74,18 +82,21 @@ export class Kit<
                     screenToFlowPosition({
                         x: event.clientX,
                         y: event.clientY,
-                    })
+                    }),
                 );
                 setNodes((nds) => [...nds, node]);
             }
         };
-        const onDragStart = (event: DragEvent<Element>, label: string) => {
+        const onDragStart = (
+            event: DragEvent<Element>,
+            label: string | keyof NodeTypes,
+        ) => {
             event.dataTransfer.setData(
                 format,
                 JSON.stringify({
                     type: label,
                     data: this.nodeTypes[label]!.defaultData(),
-                })
+                }),
             );
         };
         return {
