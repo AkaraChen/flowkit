@@ -7,56 +7,32 @@ import {
     Position,
     useReactFlow,
 } from '@xyflow/react';
-import { useEffect, useId } from 'react';
-import type { KitNodeDataInternal } from './node';
+import type { BaseHandleMeta, KitNodeDataWithInternal } from './node';
 import { useNodeContext } from './node-context';
 
 export interface CommonHandleProps<T extends KitDataType<any>>
     extends Omit<HandleProps, 'position'> {
     dataType: T;
+    name: string;
 }
 
 export function CommonHandle<T extends KitDataType<any>>(
     props: CommonHandleProps<T>,
 ) {
-    const { dataType, ...rest } = props;
-    const id = useId();
-    const instance = useReactFlow();
+    const { dataType, name, ...rest } = props;
     const { id: nodeId } = useNodeContext();
-    const node = instance.getNode(nodeId);
-    useEffect(() => {
-        const nodeData = node?.data as KitNodeDataInternal;
-        const hasCurrentHandle = nodeData.kit.handles.some(
-            (handle) => handle.id === id,
-        );
-        if (!hasCurrentHandle) {
-            instance.updateNode(nodeId, (node) => {
-                const data = node.data as KitNodeDataInternal;
-                data.kit.handles.push({
-                    id,
-                    ...props,
-                });
-                return node;
-            });
-        }
-        return () => {
-            instance.updateNode(nodeId, (node) => {
-                const data = node.data as KitNodeDataInternal;
-                data.kit.handles = data.kit.handles.filter(
-                    (handle) => handle.id !== id,
-                );
-                return node;
-            });
-        };
-    }, []);
+    const id = `${name}@${nodeId}`;
+    const instance = useReactFlow();
     const isValidConnection: IsValidConnection = (connection) => {
-        const targetNode = instance.getNode(
-            connection.target,
-        ) as Node<KitNodeDataInternal>;
+        const targetNode = instance.getNode(connection.target) as Node<
+            KitNodeDataWithInternal<Record<string, BaseHandleMeta>>
+        >;
         const targetNodeData = targetNode?.data;
         if (!targetNodeData) return false;
-        const targetHandle = targetNodeData.kit.handles.find(
-            (handle) => handle.id === connection.targetHandle,
+        const targetHandle = Object.values(targetNodeData.kit.handles).find(
+            (handle) =>
+                connection.targetHandle ===
+                `${handle.name}@${connection.target}`,
         );
         return targetHandle?.dataType === dataType;
     };

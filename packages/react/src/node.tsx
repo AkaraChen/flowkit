@@ -1,31 +1,60 @@
-import type { NodeBase, NodeProps } from '@xyflow/system';
+import type { KitDataType } from '@akrc/flowkit';
+import type { HandleType, NodeBase, NodeProps } from '@xyflow/system';
 import type { FC } from 'react';
-import type { CommonHandleProps } from './field';
 import { NodeContextProvider } from './node-context';
 
-export type KitInternalNodeData = {
-    handles: CommonHandleProps<any>[];
-};
-
-export type KitNodeDataInternal = {
-    kit: KitInternalNodeData;
-};
-
-export interface KitCustomNode<Data extends Record<string, unknown>> {
-    fc: FC<NodeProps<NodeBase<KitNodeDataInternal & Data>>>;
-    defaultData: () => Data;
+export interface RawBaseHandleMeta {
+    type: HandleType;
+    dataType: KitDataType<any>;
 }
 
-export function defineKitNode<Data extends Record<string, unknown>>(
-    node: KitCustomNode<Data>,
-) {
-    const defaultData = (): Data & KitNodeDataInternal => {
+export interface BaseHandleMeta extends RawBaseHandleMeta {
+    name: string;
+}
+
+export type KitNodeInternal<T extends Record<string, RawBaseHandleMeta>> = {
+    handles: T;
+};
+
+export type KitNodeDataWithInternal<
+    T extends Record<string, RawBaseHandleMeta>,
+> = {
+    kit: KitNodeInternal<T>;
+};
+
+export interface KitCustomNode<
+    Data extends Record<string, unknown>,
+    Handles extends Record<string, RawBaseHandleMeta>,
+> {
+    fc: FC<NodeProps<NodeBase<Data & KitNodeDataWithInternal<Handles>>>>;
+    defaultData(): Data;
+    handles?: Handles;
+}
+
+export function defineKitNode<
+    Data extends Record<string, unknown>,
+    Handles extends Record<string, BaseHandleMeta>,
+>(node: KitCustomNode<Data, Handles>) {
+    const handles = Object.entries(node.handles ?? {})
+        .map(([name, handle]) => ({
+            ...handle,
+            name,
+        }))
+        .reduce(
+            (acc, handle) => {
+                acc[handle.name] = handle;
+                return acc;
+            },
+            {} as Record<string, BaseHandleMeta>,
+        );
+
+    const defaultData = (): Data & KitNodeDataWithInternal<Handles> => {
         const data = node.defaultData();
         return {
             ...data,
             kit: {
-                handles: [],
-            } as KitInternalNodeData,
+                handles: handles as Handles,
+            },
         };
     };
     const fc: typeof node.fc = (props) => {

@@ -2,42 +2,57 @@ import { CommonHandle, defineKitNode } from '@akrc/flowkit-react';
 import { dataTypes } from './data-types';
 import { NodeLayout } from './layout';
 
-const mathMin = defineKitNode<{
-    left: number;
-    right: number;
-}>({
+const mathMin = defineKitNode({
     defaultData() {
         return {
             left: 0,
             right: 1,
         };
     },
+    handles: {
+        left: {
+            name: 'left',
+            type: 'source',
+            dataType: dataTypes.number,
+        },
+        right: {
+            name: 'right',
+            type: 'source',
+            dataType: dataTypes.number,
+        },
+    },
     fc({ data }) {
+        const handles = data.kit.handles;
         return (
             <NodeLayout>
                 <div>Math min</div>
                 <div>
                     {data.left} &lt; {data.right}
                 </div>
-                <CommonHandle
-                    type='source'
-                    dataType={dataTypes.number}
-                    className='size-4'
-                />
+                <CommonHandle {...handles.left} className='size-4' />
             </NodeLayout>
         );
     },
 });
 
-const textJoin = defineKitNode<{
-    left: string;
-    right: string;
-}>({
+const textJoin = defineKitNode({
     defaultData() {
         return {
             left: 'Hello',
             right: 'World',
         };
+    },
+    handles: {
+        left: {
+            name: 'left',
+            type: 'target',
+            dataType: dataTypes.string,
+        },
+        right: {
+            name: 'right',
+            type: 'target',
+            dataType: dataTypes.string,
+        },
     },
     fc({ data }) {
         return (
@@ -46,11 +61,7 @@ const textJoin = defineKitNode<{
                 <div>
                     {data.left}, {data.right}
                 </div>
-                <CommonHandle
-                    type='target'
-                    dataType={dataTypes.string}
-                    className='size-4'
-                />
+                <CommonHandle {...data.kit.handles.left} className='size-4' />
             </NodeLayout>
         );
     },

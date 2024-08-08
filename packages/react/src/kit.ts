@@ -1,4 +1,3 @@
-import type { KitDataType } from '@akrc/flowkit';
 import type {
     EdgeProps,
     ReactFlowInstance,
@@ -7,12 +6,12 @@ import type {
 } from '@xyflow/react';
 import type { XYPosition } from '@xyflow/system';
 import { nanoid } from 'nanoid';
-import { type DragEvent, type DragEventHandler, useId } from 'react';
+import type { DragEvent, DragEventHandler } from 'react';
 import type { KitCustomEdge } from './edge';
-import type { KitCustomNode, KitInternalNodeData } from './node';
+import type { KitCustomNode } from './node';
 
 export class Kit<
-    NodeTypes extends Record<string, KitCustomNode<any>>,
+    NodeTypes extends Record<string, KitCustomNode<any, any>>,
     EdgeTypes extends Record<string, KitCustomEdge<any>>,
 > {
     readonly name: string;
@@ -39,9 +38,6 @@ export class Kit<
         const dataWithInternal = {
             ...nodeType?.defaultData(),
             ...data,
-            kit: {
-                handles: [],
-            } as KitInternalNodeData,
         };
         return {
             id: nanoid(),
