@@ -1,4 +1,4 @@
-import { FlowKit } from '@akrc/flowkit-react';
+import { FlowKit } from "@akrc/flowkit-react";
 import {
     Background,
     type Edge,
@@ -10,10 +10,10 @@ import {
     applyEdgeChanges,
     applyNodeChanges,
     useReactFlow,
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import { useState } from 'react';
-import flowkitProps, { kit } from './flow';
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { useState } from "react";
+import flowkitProps, { kit } from "./flow";
 
 function App() {
     const [nodes, setNodes] = useState<Node[]>(flowkitProps.nodes);
@@ -31,18 +31,18 @@ function App() {
     return (
         <div
             style={{
-                width: '100vw',
-                height: '100vh',
-                display: 'flex',
+                width: "100vw",
+                height: "100vh",
+                display: "flex",
             }}
         >
-            <div style={{ width: '25vw', height: '100vh' }}>
-                <ul className='grid grid-cols-2 gap-4 p-4'>
+            <div style={{ width: "25vw", height: "100vh" }}>
+                <ul className="grid grid-cols-2 gap-4 p-4">
                     {Object.keys(kit.nodeTypes).map((label) => {
                         return (
                             <li
                                 key={label}
-                                className='shadow border border-zinc-200 p-2 rounded'
+                                className="shadow border border-zinc-200 p-2 rounded"
                                 draggable
                                 onDragStart={(event) => {
                                     dnd.onDragStart(event, label);
@@ -54,7 +54,7 @@ function App() {
                     })}
                 </ul>
             </div>
-            <div style={{ width: '75vw', height: '100vh' }}>
+            <div style={{ width: "75vw", height: "100vh" }}>
                 <FlowKit
                     kit={kit}
                     nodes={nodes}

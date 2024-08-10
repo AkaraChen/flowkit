@@ -66,6 +66,10 @@ importers:
         version: 5.3.5
 
   packages/core:
+    dependencies:
+      consola:
+        specifier: ^3.2.3
+        version: 3.2.3
     devDependencies:
       '@xyflow/system':
         specifier: ^0.0.37

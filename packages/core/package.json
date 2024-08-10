@@ -22,5 +22,8 @@
         "build": "tsup",
         "dev": "tsup --watch"
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "consola": "^3.2.3"
+    }
 }

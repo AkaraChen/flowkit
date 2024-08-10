@@ -34,6 +34,15 @@ export function CommonHandle<T extends KitDataType<any>>(
                 connection.targetHandle ===
                 `${handle.name}@${connection.target}`,
         );
+        console.log(
+            'isValidConnection',
+            'targetHandle?.dataType',
+            targetHandle?.dataType,
+            'dataType',
+            dataType,
+            'targetHandle?.dataType === dataType',
+            targetHandle?.dataType === dataType,
+        );
         return targetHandle?.dataType === dataType;
     };
     return (
