@@ -1,8 +1,9 @@
 import { createContext, useContext } from 'react';
 
-export interface NodeContext {
-    id: string;
-}
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+export type NodeContext = {
+    // TODO: Add node context
+};
 
 const NodeContext = createContext<NodeContext>(null as unknown as NodeContext);
 export const NodeContextProvider = NodeContext.Provider;

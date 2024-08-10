@@ -28,25 +28,28 @@ export interface KitCustomNode<
 > {
     fc: FC<NodeProps<NodeBase<Data & KitNodeDataWithInternal<Handles>>>>;
     defaultData(): Data;
-    handles?: Handles;
+    handles?: Handles | 'none' | 'dynamic';
 }
 
 export function defineKitNode<
     Data extends Record<string, unknown>,
     Handles extends Record<string, BaseHandleMeta>,
 >(node: KitCustomNode<Data, Handles>) {
-    const handles = Object.entries(node.handles ?? {})
-        .map(([name, handle]) => ({
-            ...handle,
-            name,
-        }))
-        .reduce(
-            (acc, handle) => {
-                acc[handle.name] = handle;
-                return acc;
-            },
-            {} as Record<string, BaseHandleMeta>,
-        );
+    const handles =
+        typeof node.handles === 'object'
+            ? Object.entries(node.handles ?? {})
+                  .map(([name, handle]) => ({
+                      ...handle,
+                      name,
+                  }))
+                  .reduce(
+                      (acc, handle) => {
+                          acc[handle.name] = handle;
+                          return acc;
+                      },
+                      {} as Record<string, BaseHandleMeta>,
+                  )
+            : ({} as Handles);
 
     const defaultData = (): Data & KitNodeDataWithInternal<Handles> => {
         const data = node.defaultData();
@@ -60,11 +63,7 @@ export function defineKitNode<
     const fc: typeof node.fc = (props) => {
         const FC = node.fc;
         return (
-            <NodeContextProvider
-                value={{
-                    id: props.id,
-                }}
-            >
+            <NodeContextProvider value={{}}>
                 <FC {...props} />
             </NodeContextProvider>
         );
