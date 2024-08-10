@@ -120,7 +120,7 @@ const inputs = defineKitNode({
                     return (
                         <div key={name}>
                             <CommonHandle {...handle} className='size-4' />
-                            source
+                            source {handle.name}
                         </div>
                     );
                 })}
