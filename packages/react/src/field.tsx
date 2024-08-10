@@ -5,10 +5,10 @@ import {
     type IsValidConnection,
     type Node,
     Position,
+    useNodeId,
     useReactFlow,
 } from '@xyflow/react';
 import type { BaseHandleMeta, KitNodeDataWithInternal } from './node';
-import { useNodeContext } from './node-context';
 
 export interface CommonHandleProps<T extends KitDataType<any>>
     extends Omit<HandleProps, 'position'> {
@@ -20,7 +20,7 @@ export function CommonHandle<T extends KitDataType<any>>(
     props: CommonHandleProps<T>,
 ) {
     const { dataType, name, ...rest } = props;
-    const { id: nodeId } = useNodeContext();
+    const nodeId = useNodeId();
     const id = `${name}@${nodeId}`;
     const instance = useReactFlow();
     const isValidConnection: IsValidConnection = (connection) => {
@@ -33,6 +33,15 @@ export function CommonHandle<T extends KitDataType<any>>(
             (handle) =>
                 connection.targetHandle ===
                 `${handle.name}@${connection.target}`,
+        );
+        console.log(
+            'isValidConnection',
+            'targetHandle?.dataType',
+            targetHandle?.dataType,
+            'dataType',
+            dataType,
+            'targetHandle?.dataType === dataType',
+            targetHandle?.dataType === dataType,
         );
         return targetHandle?.dataType === dataType;
     };

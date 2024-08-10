@@ -1,6 +1,7 @@
-import { CommonHandle, defineKitNode } from '@akrc/flowkit-react';
-import { dataTypes } from './data-types';
-import { NodeLayout } from './layout';
+import { CommonHandle, defineKitNode, useHandles } from "@akrc/flowkit-react";
+import { nanoid } from "nanoid";
+import { dataTypes } from "./data-types";
+import { NodeLayout } from "./layout";
 
 const mathMin = defineKitNode({
     defaultData() {
@@ -11,13 +12,13 @@ const mathMin = defineKitNode({
     },
     handles: {
         left: {
-            name: 'left',
-            type: 'source',
+            name: "left",
+            type: "source",
             dataType: dataTypes.number,
         },
         right: {
-            name: 'right',
-            type: 'source',
+            name: "right",
+            type: "target",
             dataType: dataTypes.number,
         },
     },
@@ -29,7 +30,14 @@ const mathMin = defineKitNode({
                 <div>
                     {data.left} &lt; {data.right}
                 </div>
-                <CommonHandle {...handles.left} className='size-4' />
+                <div>
+                    <CommonHandle {...handles.left} className="size-4" />
+                    left
+                </div>
+                <div>
+                    <CommonHandle {...handles.right} className="size-4" />
+                    right
+                </div>
             </NodeLayout>
         );
     },
@@ -38,19 +46,19 @@ const mathMin = defineKitNode({
 const textJoin = defineKitNode({
     defaultData() {
         return {
-            left: 'Hello',
-            right: 'World',
+            left: "Hello",
+            right: "World",
         };
     },
     handles: {
         left: {
-            name: 'left',
-            type: 'target',
+            name: "left",
+            type: "target",
             dataType: dataTypes.string,
         },
         right: {
-            name: 'right',
-            type: 'target',
+            name: "right",
+            type: "source",
             dataType: dataTypes.string,
         },
     },
@@ -61,13 +69,68 @@ const textJoin = defineKitNode({
                 <div>
                     {data.left}, {data.right}
                 </div>
-                <CommonHandle {...data.kit.handles.left} className='size-4' />
+                <div>
+                    <CommonHandle
+                        {...data.kit.handles.left}
+                        className="size-4"
+                    />
+                    left
+                </div>
+                <div>
+                    <CommonHandle
+                        {...data.kit.handles.right}
+                        className="size-4"
+                    />
+                    right
+                </div>
+            </NodeLayout>
+        );
+    },
+});
+
+const inputs = defineKitNode({
+    defaultData() {
+        return {};
+    },
+    handles: "dynamic",
+    fc({ data }) {
+        const [handles, updateHandles] = useHandles<typeof data.kit.handles>();
+        return (
+            <NodeLayout>
+                <div>Input</div>
+                <button
+                    onClick={() => {
+                        const name = nanoid();
+                        updateHandles((handles) => {
+                            return {
+                                ...handles,
+                                [name]: {
+                                    name,
+                                    type: "source",
+                                    dataType: dataTypes.string,
+                                },
+                            };
+                        });
+                    }}
+                    type="button"
+                >
+                    add input
+                </button>
+                {Object.entries(handles).map(([name, handle]) => {
+                    return (
+                        <div key={name}>
+                            <CommonHandle {...handle} className="size-4" />
+                            {name}
+                        </div>
+                    );
+                })}
             </NodeLayout>
         );
     },
 });
 
 export const nodeTypes = {
-    'math-min': mathMin,
-    'text-join': textJoin,
+    "math-min": mathMin,
+    "text-join": textJoin,
+    inputs: inputs,
 };
