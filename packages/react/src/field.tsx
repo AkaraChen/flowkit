@@ -24,26 +24,26 @@ export function CommonHandle<T extends KitDataType<any>>(
     const id = `${name}@${nodeId}`;
     const instance = useReactFlow();
     const isValidConnection: IsValidConnection = (connection) => {
-        const targetNode = instance.getNode(connection.target) as Node<
-            KitNodeDataWithInternal<Record<string, BaseHandleMeta>>
-        >;
-        const targetNodeData = targetNode?.data;
-        if (!targetNodeData) return false;
-        const targetHandle = Object.values(targetNodeData.kit.handles).find(
-            (handle) =>
-                connection.targetHandle ===
-                `${handle.name}@${connection.target}`,
-        );
-        console.log(
-            'isValidConnection',
-            'targetHandle?.dataType',
-            targetHandle?.dataType,
-            'dataType',
-            dataType,
-            'targetHandle?.dataType === dataType',
-            targetHandle?.dataType === dataType,
-        );
-        return targetHandle?.dataType === dataType;
+        const isCurrentNodeSource = connection.source === nodeId;
+        const connectedNode = instance.getNode(
+            isCurrentNodeSource ? connection.target : connection.source,
+        ) as Node<KitNodeDataWithInternal<Record<string, BaseHandleMeta>>>;
+        const connectedNodeData = connectedNode?.data;
+        const connectedHandle = Object.values(
+            connectedNodeData.kit.handles,
+        ).find((handle) => {
+            if (isCurrentNodeSource) {
+                return (
+                    connection.targetHandle ===
+                    `${handle.name}@${connection.target}`
+                );
+            }
+            return (
+                connection.sourceHandle ===
+                `${handle.name}@${connection.source}`
+            );
+        });
+        return connectedHandle?.dataType.name === dataType.name;
     };
     return (
         <Handle
