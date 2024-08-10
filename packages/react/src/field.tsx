@@ -24,26 +24,20 @@ export function CommonHandle<T extends KitDataType<any>>(
     const id = `${name}@${nodeId}`;
     const instance = useReactFlow();
     const isValidConnection: IsValidConnection = (connection) => {
-        const targetNode = instance.getNode(connection.target) as Node<
-            KitNodeDataWithInternal<Record<string, BaseHandleMeta>>
-        >;
-        const targetNodeData = targetNode?.data;
-        if (!targetNodeData) return false;
-        const targetHandle = Object.values(targetNodeData.kit.handles).find(
+        const currentIsSource = connection.source === nodeId;
+        const anotherNode = instance.getNode(
+            currentIsSource ? connection.target : connection.source,
+        ) as Node<KitNodeDataWithInternal<Record<string, BaseHandleMeta>>>;
+        const anotherNodeData = anotherNode?.data;
+        const anotherHandle = Object.values(anotherNodeData.kit.handles).find(
             (handle) =>
-                connection.targetHandle ===
-                `${handle.name}@${connection.target}`,
+                currentIsSource
+                    ? connection.targetHandle ===
+                      `${handle.name}@${connection.target}`
+                    : connection.sourceHandle ===
+                      `${handle.name}@${connection.source}`,
         );
-        console.log(
-            'isValidConnection',
-            'targetHandle?.dataType',
-            targetHandle?.dataType,
-            'dataType',
-            dataType,
-            'targetHandle?.dataType === dataType',
-            targetHandle?.dataType === dataType,
-        );
-        return targetHandle?.dataType === dataType;
+        return anotherHandle?.dataType.name === dataType.name;
     };
     return (
         <Handle

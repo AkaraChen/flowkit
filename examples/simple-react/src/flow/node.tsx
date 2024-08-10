@@ -1,7 +1,7 @@
-import { CommonHandle, defineKitNode, useHandles } from "@akrc/flowkit-react";
-import { nanoid } from "nanoid";
-import { dataTypes } from "./data-types";
-import { NodeLayout } from "./layout";
+import { CommonHandle, defineKitNode, useHandles } from '@akrc/flowkit-react';
+import { nanoid } from 'nanoid';
+import { dataTypes } from './data-types';
+import { NodeLayout } from './layout';
 
 const mathMin = defineKitNode({
     defaultData() {
@@ -12,13 +12,13 @@ const mathMin = defineKitNode({
     },
     handles: {
         left: {
-            name: "left",
-            type: "source",
+            name: 'left',
+            type: 'source',
             dataType: dataTypes.number,
         },
         right: {
-            name: "right",
-            type: "target",
+            name: 'right',
+            type: 'target',
             dataType: dataTypes.number,
         },
     },
@@ -31,12 +31,12 @@ const mathMin = defineKitNode({
                     {data.left} &lt; {data.right}
                 </div>
                 <div>
-                    <CommonHandle {...handles.left} className="size-4" />
-                    left
+                    <CommonHandle {...handles.left} className='size-4' />
+                    {handles.left.type}
                 </div>
                 <div>
-                    <CommonHandle {...handles.right} className="size-4" />
-                    right
+                    <CommonHandle {...handles.right} className='size-4' />
+                    {handles.right.type}
                 </div>
             </NodeLayout>
         );
@@ -46,19 +46,19 @@ const mathMin = defineKitNode({
 const textJoin = defineKitNode({
     defaultData() {
         return {
-            left: "Hello",
-            right: "World",
+            left: 'Hello',
+            right: 'World',
         };
     },
     handles: {
         left: {
-            name: "left",
-            type: "target",
+            name: 'left',
+            type: 'target',
             dataType: dataTypes.string,
         },
         right: {
-            name: "right",
-            type: "source",
+            name: 'right',
+            type: 'source',
             dataType: dataTypes.string,
         },
     },
@@ -72,16 +72,16 @@ const textJoin = defineKitNode({
                 <div>
                     <CommonHandle
                         {...data.kit.handles.left}
-                        className="size-4"
+                        className='size-4'
                     />
-                    left
+                    {data.kit.handles.left.type}
                 </div>
                 <div>
                     <CommonHandle
                         {...data.kit.handles.right}
-                        className="size-4"
+                        className='size-4'
                     />
-                    right
+                    {data.kit.handles.right.type}
                 </div>
             </NodeLayout>
         );
@@ -92,7 +92,7 @@ const inputs = defineKitNode({
     defaultData() {
         return {};
     },
-    handles: "dynamic",
+    handles: 'dynamic',
     fc({ data }) {
         const [handles, updateHandles] = useHandles<typeof data.kit.handles>();
         return (
@@ -106,21 +106,21 @@ const inputs = defineKitNode({
                                 ...handles,
                                 [name]: {
                                     name,
-                                    type: "source",
+                                    type: 'source',
                                     dataType: dataTypes.string,
                                 },
                             };
                         });
                     }}
-                    type="button"
+                    type='button'
                 >
                     add input
                 </button>
                 {Object.entries(handles).map(([name, handle]) => {
                     return (
                         <div key={name}>
-                            <CommonHandle {...handle} className="size-4" />
-                            {name}
+                            <CommonHandle {...handle} className='size-4' />
+                            source
                         </div>
                     );
                 })}
@@ -130,7 +130,7 @@ const inputs = defineKitNode({
 });
 
 export const nodeTypes = {
-    "math-min": mathMin,
-    "text-join": textJoin,
+    'math-min': mathMin,
+    'text-join': textJoin,
     inputs: inputs,
 };
