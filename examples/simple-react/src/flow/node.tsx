@@ -1,7 +1,46 @@
-import { CommonHandle, defineKitNode, useHandles } from '@akrc/flowkit-react';
+import type { KitDataType } from '@akrc/flowkit';
+import {
+    CommonHandle,
+    type CommonHandleProps,
+    defineKitNode,
+    useHandles,
+} from '@akrc/flowkit-react';
 import { nanoid } from 'nanoid';
+import { twJoin } from 'tailwind-merge';
 import { dataTypes } from './data-types';
 import { NodeLayout } from './layout';
+
+function getHandleColor(dataType: keyof typeof dataTypes) {
+    switch (dataType) {
+        case 'number':
+            return 'bg-blue-300';
+        case 'string':
+            return 'bg-yellow-300';
+        default:
+            return 'bg-gray-300';
+    }
+}
+
+function Handle<T extends KitDataType<any>>(props: CommonHandleProps<T>) {
+    const { type, dataType, name } = props;
+    return (
+        <div
+            className={twJoin(
+                'flex items-baseline gap-2',
+                type === 'source' && 'flex-row-reverse',
+            )}
+        >
+            <CommonHandle
+                {...props}
+                className={twJoin(
+                    getHandleColor(dataType.name as any),
+                    'size-4',
+                )}
+            />
+            <span>{name}</span>
+        </div>
+    );
+}
 
 const mathMin = defineKitNode({
     defaultData() {
@@ -30,14 +69,8 @@ const mathMin = defineKitNode({
                 <div>
                     {data.left} &lt; {data.right}
                 </div>
-                <div>
-                    <CommonHandle {...handles.left} className='size-4' />
-                    {handles.left.type}
-                </div>
-                <div>
-                    <CommonHandle {...handles.right} className='size-4' />
-                    {handles.right.type}
-                </div>
+                <Handle {...handles.left} />
+                <Handle {...handles.right} />
             </NodeLayout>
         );
     },
@@ -69,20 +102,8 @@ const textJoin = defineKitNode({
                 <div>
                     {data.left}, {data.right}
                 </div>
-                <div>
-                    <CommonHandle
-                        {...data.kit.handles.left}
-                        className='size-4'
-                    />
-                    {data.kit.handles.left.type}
-                </div>
-                <div>
-                    <CommonHandle
-                        {...data.kit.handles.right}
-                        className='size-4'
-                    />
-                    {data.kit.handles.right.type}
-                </div>
+                <Handle {...data.kit.handles.left} />
+                <Handle {...data.kit.handles.right} />
             </NodeLayout>
         );
     },
@@ -117,12 +138,7 @@ const inputs = defineKitNode({
                     add input
                 </button>
                 {Object.entries(handles).map(([name, handle]) => {
-                    return (
-                        <div key={name}>
-                            <CommonHandle {...handle} className='size-4' />
-                            source {handle.name}
-                        </div>
-                    );
+                    return <Handle key={name} {...handle} />;
                 })}
             </NodeLayout>
         );

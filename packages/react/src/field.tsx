@@ -51,7 +51,8 @@ export function CommonHandle<T extends KitDataType<any>>(
             position={Position.Bottom}
             id={id}
             style={{
-                position: 'initial',
+                position: 'static',
+                transform: 'none',
                 ...props.style,
             }}
             isValidConnection={isValidConnection}
