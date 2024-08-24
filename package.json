@@ -17,5 +17,10 @@
     "scripts": {
         "check": "biome check . --write",
         "dev": "turbo watch dev --filter=./packages/**"
+    },
+    "pnpm": {
+        "overrides": {
+            "is-core-module": "npm:@nolyfill/is-core-module@^1"
+        }
     }
 }
